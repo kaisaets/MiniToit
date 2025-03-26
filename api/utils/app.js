@@ -46,6 +46,33 @@ app.get("/api/recipes", (req, res) => {
   res.json({message: "API töötab", data: [1, 2, 3, 4, 5]});
 } );
 
+// Add this POST route to your Express app
+
+app.post('/api/recipes', (req, res) => {
+  const { pealkiri, pilt, tekst } = req.body;
+
+  if (!pealkiri || !pilt || !tekst) {
+    return res.status(400).json({ error: 'Kõik väljad peavad olema täidetud.' });
+  }
+
+  const query = 'INSERT INTO retseptid (pealkiri, pilt, tekst) VALUES (?, ?, ?)';
+  pool.query(query, [pealkiri, pilt, tekst], (err, result) => {
+    if (err) {
+      console.error('Andmebaasi viga:', err);
+      return res.status(500).json({ error: 'Andmebaasi viga', details: err.message });
+    }
+
+    res.status(201).json({
+      id: result.insertId, // The ID of the newly added recipe
+      pealkiri,
+      pilt,
+      tekst,
+      showDetails: false, // Initially, don't show details
+    });
+    res.status(201).json(newRecipe); // Send the newly created recipe back to the client
+  });
+});
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
