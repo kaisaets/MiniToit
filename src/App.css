@@ -34,10 +34,16 @@ body {
 
 /* Recipe card */
 .recipe-card {
+  position: relative;
   background: #ffffff;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.recipe-image-container {
+  position: relative; /* Add this container around the image */
 }
 
 /* Recipe image */
@@ -54,6 +60,28 @@ body {
   font-size: 16px;
   line-height: 1.5;
 }
+
+/* Button styling */
+button {
+  position: absolute; /* Position it relative to the parent container */
+  bottom: 22px; /* Distance from bottom */
+  left: 15px; /* Distance from the left */
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10; /* Ensure it appears above the image */
+}
+
+button:hover {
+  background-color: #ff4500;
+}
+
+
 @media (max-width: 600px) {
   .container {
     width: 90%;
