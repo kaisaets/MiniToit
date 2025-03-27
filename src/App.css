@@ -101,11 +101,33 @@ header h1 {
   border-radius: 0 0 15px 15px;
 }
 
+/* Kaardi nupud*/
+
+.buttons {
+  
+} 
+
 /* Kaardi nupp */
-.recipe-card button {
+.recipe-card .ava-button {
   position: absolute; /* Position it relative to the parent container */
   bottom: 12px; 
   left: 15px; 
+  display: block;
+  margin: 10px auto;
+  padding: 8px 20px;
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 5; /* Ensure it appears above the image */
+}
+
+.recipe-card .muuda-button {
+  position: absolute; /* Position it relative to the parent container */
+  bottom: 12px; 
+  left: 100px; 
   display: block;
   margin: 10px auto;
   padding: 8px 20px;
@@ -131,6 +153,7 @@ header h1 {
   padding: 20px;
   margin: 20px auto;
   max-width: 500px;
+  
 }
 
 .form-card h2 {
@@ -176,12 +199,14 @@ form button {
   font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 5px;
 }
 
 form button:hover {
   background-color: #ff4a35;
   transform: scale(1.05);
 }
+
 
 /* Peida vorm */
 .toggle-form-btn {

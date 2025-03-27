@@ -11,6 +11,7 @@ function App() {
     tekst: "",
   });
   const [showForm, setShowForm] = useState(false); // Peidab
+  const [editingRecipe, setEditingRecipe] = useState(null); //Millist retsepti muudab
 
   // Fetch recipes data from the backend
   useEffect(() => {
@@ -99,11 +100,50 @@ function App() {
     setData((prevData) =>
       prevData.map((recipe) =>
         recipe.id === id
-          ? { ...recipe, showDetails: !recipe.showDetails }
+          ? { ...recipe, showDetails: !recipe.showDetails}
           : recipe
       )
     );
   };
+
+  // Handle the edit button click
+const handleEditClick = (recipe) => {
+  setEditingRecipe(recipe); // Set the recipe to be edited
+};
+
+// Handle edit form submission
+const handleEditFormSubmit = (e) => {
+  e.preventDefault();
+
+  const { pealkiri, pilt, tekst } = editingRecipe;
+
+  if (!pealkiri || !pilt || !tekst) {
+    alert("Palun täida kõik väljad.");
+    return;
+  }
+
+  // Send the updated recipe to the backend
+  fetch(`http://localhost:3034/api/recipes/${editingRecipe.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(editingRecipe),
+  })
+    .then((response) => response.json())
+    .then((updatedRecipe) => {
+      console.log("Retsept uuendatud:", updatedRecipe);
+      setData((prevData) =>
+        prevData.map((recipe) =>
+          recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+        )
+      );
+      setEditingRecipe(null); // Reset the editing state
+    })
+    .catch((error) => {
+      console.error("Ilmnes viga!:", error);
+    });
+};
 
   if (loading) return <p>Laeb...</p>;
   if (error) return <p>Viga: {error}</p>;
@@ -160,6 +200,7 @@ function App() {
         </div>
       )}
 
+     
       {/* Retseptid */}
       <div className="recipe-list">
         {data.map((item) => (
@@ -171,9 +212,16 @@ function App() {
               alt={item.pealkiri}
               className="recipe-image"
             />
-            <button className="button" onClick={() => toggleRecipeDetails(item.id)}>
-              {item.showDetails ? "Sulge" : "Ava"}
-            </button>
+              <div className="buttons">
+              <button className=" ava-button" onClick={() => toggleRecipeDetails(item.id)}>
+                {item.showDetails ? "Sulge" : "Ava"}
+              </button>
+              {item.showDetails && (
+              <button className="muuda-button" onClick={() => handleEditClick(item)}>
+                Muuda
+              </button>
+              )} 
+              </div>
             </div>
             {item.showDetails && (
               <div
@@ -181,6 +229,65 @@ function App() {
                 dangerouslySetInnerHTML={{ __html: item.tekst }}
               />
             )}
+                    {/* Show the edit form if editingRecipe is set */}
+            {editingRecipe && (
+              <div className="form-card">
+                <h2>Muuda retsepti</h2>
+                <form onSubmit={handleEditFormSubmit}>
+                  <div>
+                    <label htmlFor="pealkiri">Pealkiri:</label>
+                    <input
+                      type="text"
+                      id="pealkiri"
+                      name="pealkiri"
+                      value={editingRecipe.pealkiri}
+                      onChange={(e) =>
+                        setEditingRecipe({
+                          ...editingRecipe,
+                          pealkiri: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="pilt">Pildi aadress:</label>
+                    <input
+                      type="text"
+                      id="pilt"
+                      name="pilt"
+                      value={editingRecipe.pilt}
+                      onChange={(e) =>
+                        setEditingRecipe({
+                          ...editingRecipe,
+                          pilt: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tekst">Juhised:</label>
+                    <textarea
+                      id="tekst"
+                      name="tekst"
+                      value={editingRecipe.tekst}
+                      onChange={(e) =>
+                        setEditingRecipe({
+                          ...editingRecipe,
+                          tekst: e.target.value,
+                        })
+                      }
+                      required
+                    ></textarea>
+                  </div>
+                  <button type="submit">Uuenda retsept</button>
+                <button onClick={() => setEditingRecipe(null)}>Tühista</button>
+                </form>
+                
+              </div>
+            )}
+
           </div>
         ))}
       </div>
