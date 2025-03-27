@@ -10,17 +10,17 @@ function App() {
     pilt: "",
     tekst: "",
   });
-  const [showForm, setShowForm] = useState(false); // State to toggle form visibility
+  const [showForm, setShowForm] = useState(false); // Peidab
 
   // Fetch recipes data from the backend
   useEffect(() => {
     fetch("http://localhost:3034/api/recipes")
       .then((response) => response.json())
       .then((json) => {
-        // Add a 'showDetails' field to each recipe when we fetch the data
+        // Ei kuva kirjeldust
         const recipesWithDetails = json.map((recipe) => ({
           ...recipe,
-          showDetails: false, // Initialize showDetails to false
+          showDetails: false, // esialgu
         }));
         setData(recipesWithDetails);
         setLoading(false);
@@ -32,7 +32,7 @@ function App() {
       });
   }, []);
 
-  // Handle input changes in the form
+  // Handle input changes FORM
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewRecipe((prevState) => ({
@@ -41,7 +41,7 @@ function App() {
     }));
   };
 
-  // Handle form submission to add a new recipe
+  // Handle submit FORM
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
@@ -52,14 +52,14 @@ function App() {
       return;
     }
 
-    const currentDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+    const currentDate = new Date().toISOString().split("T")[0];
 
-    // Create the new recipe object with the current date
+    // aeg on currentDate
     const recipeWithDate = {
       pealkiri,
       pilt,
       tekst,
-      aeg: currentDate, // Add current date here
+      aeg: currentDate, 
     };
 
     // POST request to add the new recipe to the backend
@@ -73,7 +73,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Uus retsept lisatud:", data);
-        // Add new recipe to the list with showDetails initialized to false
+        // Uue retsepti kirjeldus peidetud
         setData((prevData) => [
           { ...data, showDetails: false },
           ...prevData,
@@ -82,19 +82,19 @@ function App() {
           pealkiri: "",
           pilt: "",
           tekst: "",
-        }); // Reset the form fields
+        }); // Tuhjendab valjad
       })
       .catch((error) => {
         console.error("Ilmnes viga!:", error);
       });
   };
 
-  // Toggle form visibility
+  // Peidab vormi
   const toggleForm = () => {
     setShowForm(!showForm);
   };
 
-  // Toggle visibility of recipe details
+  // Peidab kirjelduse
   const toggleRecipeDetails = (id) => {
     setData((prevData) =>
       prevData.map((recipe) =>
@@ -112,13 +112,13 @@ function App() {
     <div className="container">
       <header>
         <h1 className="title">Mudilasesõbralikud retseptid</h1>
-        {/* Button to toggle the form */}
+        {/* Nupp*/}
         <button className="add-recipe-btn" onClick={toggleForm}>
           {showForm ? "Tühista" : "Lisa uus retsept"}
         </button>
       </header>
 
-      {/* Conditionally render the form based on showForm state */}
+      {/* Kuva seda mida showForm lubab */}
       {showForm && (
         <div className="form-card">
           <h2>Lisa uus retsept</h2>
@@ -160,7 +160,7 @@ function App() {
         </div>
       )}
 
-      {/* Recipe List */}
+      {/* Retseptid */}
       <div className="recipe-list">
         {data.map((item) => (
           <div key={item.id} className="recipe-card">
@@ -189,3 +189,24 @@ function App() {
 }
 
 export default App;
+
+
+//https://images.pexels.com/photos/939052/pexels-photo-939052.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+/*Koostisosad:
+Pelmeenid (osta valmis või tee ise)
+
+Vesi
+
+Sool
+
+Juhised:
+Keeda vesi: Täida suur pott veega ja lisa sinna soola (umbes 1 tl soola 1 liitri vee kohta). Keeda vesi tugevasti.
+
+Lisa pelmeenid: Kui vesi keeb, lisa pelmeenid ettevaatlikult keevasse vette. Ära pane liiga palju korraga, et pelmeenid saaksid vabalt ujuda.
+
+Keeda pelmeenid: Kui pelmeenid on potis, sega neid õrnalt, et nad ei jääks kokku. Kui pelmeenid tõusevad pinnale, lase neil veel 2–4 minutit keeda, et need oleksid täiesti läbi keedetud. Täpselt aega võib varieerida sõltuvalt pelmeenide suurusest ja täidise tüübist.
+
+Valmimine: Kui pelmeenid on üles kerkinud ja läbi keedetud, kurna need ära.
+
+Serveerimine: Serveeri pelmeenid kuumalt, lisades näiteks hapukoort, võid või soovi korral sinepit või ketšupit.
+*/

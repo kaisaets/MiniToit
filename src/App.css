@@ -1,25 +1,23 @@
-/* Global Styles */
-* {
+ *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif; /* Clean, modern font */
+  font-family: 'Poppins', sans-serif; 
 }
 
 body {
-  background-color: #f4f7fc; /* Soft light background */
-  color: #333; /* Dark text for good readability */
+  background-color: #f4f7fc; 
+  color: #333; 
   font-size: 16px;
 }
 
 h1, h2 {
-  color: #2e3d49; /* Slightly darker text color */
+  color: #2e3d49; 
   font-weight: 600;
 }
 
-/* Header Styles */
 header {
-  background-color: #ff6f61; /* Youthful and vibrant color */
+  background-color: #ff6f61;
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -48,7 +46,7 @@ header h1 {
   transform: scale(1.05);
 }
 
-/* Recipe List Styles */
+/* Retseptid */
 .recipe-list {
 
   padding: 20px;
@@ -56,7 +54,7 @@ header h1 {
   margin: 0 auto;
 }
 
-/* Recipe card styles */
+/* Kaardid */
   .recipe-card {
     position: relative; /* Set the container to relative so the button can be positioned inside it */
     background: #ffffff;
@@ -65,12 +63,11 @@ header h1 {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
   }
-/* Recipe title and image */
+/* Pealkiri & pilt  */
 .recipe-image-container {
   position: relative; /* Add this container around the image */
 }
 
-/* Recipe title and image */
 .recipe-image {
   width: 100%;
   max-height: 200px;
@@ -79,7 +76,6 @@ header h1 {
 }
 
 .recipe-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -100,11 +96,11 @@ header h1 {
   border-radius: 0 0 15px 15px;
 }
 
-/* Recipe Card Button */
+/* Kaardi nupp */
 .recipe-card button {
   position: absolute; /* Position it relative to the parent container */
-  bottom: 12px; /* Distance from the top */
-  left: 15px; /* Distance from the left */
+  bottom: 12px; 
+  left: 15px; 
   display: block;
   margin: 10px auto;
   padding: 8px 20px;
@@ -122,7 +118,7 @@ header h1 {
   transform: scale(1.05);
 }
 
-/* Form Styles */
+/* Form */
 .form-card {
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -182,7 +178,7 @@ form button:hover {
   transform: scale(1.05);
 }
 
-/* Button for toggling Form Visibility */
+/* Peida vorm */
 .toggle-form-btn {
   background-color: #ff6f61;
   color: white;

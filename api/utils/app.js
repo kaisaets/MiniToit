@@ -1,11 +1,11 @@
 
 const express = require('express');
-const mysql = require('mysql2'); // MySQL client
+const mysql = require('mysql2'); 
 const cors = require('cors'); // CORS package to enable cross-origin requests
 const app = express();
 const port = 3034;
 
-// Enable CORS for all routes (you can modify this based on your needs)
+// Enable CORS for all routes
 app.use(cors({
   origin: "http://localhost:3000",
   methods: "GET,POST,PUT,DELETE",
@@ -13,17 +13,17 @@ app.use(cors({
 }));
 app.use(express.json())
 
-// Create MySQL connection pool
+
 const pool = mysql.createPool({
   host: '192.168.35.105',
-  user: 'dbuser', // Your MySQL username
-  password: 'qwerty', // Your MySQL password
-  database: 'minitoit', // Your MySQL database name
+  user: 'dbuser', 
+  password: 'qwerty', 
+  database: 'minitoit', 
 });
 
-// Simple route to fetch data from MySQL and return it as JSON
+// Route to fetch data from MySQL and return it as JSON
 app.get('/api/recipes', (req, res) => {
-  const query = 'SELECT * FROM retseptid'; // SQL query to get all data from `retseptid` table
+  const query = 'SELECT * FROM retseptid'; //get all data from `retseptid` table
 
   pool.query(query, (err, data) => {
     if (err) {
@@ -43,10 +43,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/recipes", (req, res) => {
-  res.json({message: "API töötab", data: [1, 2, 3, 4, 5]});
+  res.json({message: "API töötab", data: []});
 } );
 
-// Add this POST route to your Express app
+// POST route
 
 app.post('/api/recipes', (req, res) => {
   const { pealkiri, pilt, tekst } = req.body;
