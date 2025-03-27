@@ -2,15 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.js"
   },
   "keywords": [],
   "author": "Kaisa&Margit",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "express-handlebars": "^8.0.1",
     "mysql2": "^3.13.0"

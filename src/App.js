@@ -60,7 +60,7 @@ function App() {
       pealkiri,
       pilt,
       tekst,
-      aeg: currentDate, 
+      aeg: currentDate,
     };
 
     // POST request to add the new recipe to the backend
@@ -75,10 +75,7 @@ function App() {
       .then((data) => {
         console.log("Uus retsept lisatud:", data);
         // Uue retsepti kirjeldus peidetud
-        setData((prevData) => [
-          { ...data, showDetails: false },
-          ...prevData,
-        ]);
+        setData((prevData) => [{ ...data, showDetails: false }, ...prevData]);
         setNewRecipe({
           pealkiri: "",
           pilt: "",
@@ -100,53 +97,74 @@ function App() {
     setData((prevData) =>
       prevData.map((recipe) =>
         recipe.id === id
-          ? { ...recipe, showDetails: !recipe.showDetails}
+          ? { ...recipe, showDetails: !recipe.showDetails }
           : recipe
       )
     );
   };
 
   // Handle the edit button click
-const handleEditClick = (recipe) => {
-  setEditingRecipe(recipe); // Set the recipe to be edited
-};
+  const handleEditClick = (recipe) => {
+    setEditingRecipe(recipe); // Set the recipe to be edited
+  };
 
-// Handle edit form submission
-const handleEditFormSubmit = (e) => {
-  e.preventDefault();
+  // Handle edit form submission
+  const handleEditFormSubmit = (e) => {
+    e.preventDefault();
 
-  const { pealkiri, pilt, tekst } = editingRecipe;
+    const { pealkiri, pilt, tekst } = editingRecipe;
 
-  if (!pealkiri || !pilt || !tekst) {
-    alert("Palun täida kõik väljad.");
-    return;
-  }
+    if (!pealkiri || !pilt || !tekst) {
+      alert("Palun täida kõik väljad.");
+      return;
+    }
 
-  // Send the updated recipe to the backend
-  fetch(`http://localhost:3034/api/recipes/${editingRecipe.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(editingRecipe),
-  })
-    .then((response) => response.json())
-    .then((updatedRecipe) => {
-      console.log("Retsept uuendatud:", updatedRecipe);
-      setData((prevData) =>
-        prevData.map((recipe) =>
-          recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-        )
-      );
-      setEditingRecipe(null); // Reset the editing state
+    // Send the updated recipe to the backend
+    fetch(`http://localhost:3034/api/recipes/${editingRecipe.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editingRecipe),
     })
-    .catch((error) => {
-      console.error("Ilmnes viga!:", error);
-    });
-};
+      .then((response) => response.json())
+      .then((updatedRecipe) => {
+        console.log("Retsept uuendatud:", updatedRecipe);
+        setData((prevData) =>
+          prevData.map((recipe) =>
+            recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+          )
+        );
+        setEditingRecipe(null); // Reset the editing state
+      })
+      .catch((error) => {
+        console.error("Ilmnes viga!:", error);
+      });
+  };
 
   if (loading) return <p>Laeb...</p>;
   if (error) return <p>Viga: {error}</p>;
+
+  const handleDeleteClick = (id) => {
+    const confirmDelete = window.confirm("Kas oled kindel, et soovid kustutada selle retsepti?");
+    if (confirmDelete) {
+      fetch(`http://localhost:3034/api/recipes/${id}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Retsept kutstutatud");
+            setData((prevData) =>
+              prevData.filter((recipe) => recipe.id !== id));
+          } else {
+            console.error("Kustutamine ebaõnnestus");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
 
   return (
     <div className="container">
@@ -200,27 +218,32 @@ const handleEditFormSubmit = (e) => {
         </div>
       )}
 
-     
       {/* Retseptid */}
       <div className="recipe-list">
         {data.map((item) => (
           <div key={item.id} className="recipe-card">
             <h2>{item.pealkiri}</h2>
             <div className="recipe-image-container">
-            <img
-              src={item.pilt}
-              alt={item.pealkiri}
-              className="recipe-image"
-            />
+              <img
+                src={item.pilt}
+                alt={item.pealkiri}
+                className="recipe-image"
+              />
               <div className="buttons">
-              <button className=" ava-button" onClick={() => toggleRecipeDetails(item.id)}>
-                {item.showDetails ? "Sulge" : "Ava"}
-              </button>
-              {item.showDetails && (
-              <button className="muuda-button" onClick={() => handleEditClick(item)}>
-                Muuda
-              </button>
-              )} 
+                <button
+                  className=" ava-button"
+                  onClick={() => toggleRecipeDetails(item.id)}
+                >
+                  {item.showDetails ? "Sulge" : "Ava"}
+                </button>
+                {item.showDetails && (
+                  <button
+                    className="muuda-button"
+                    onClick={() => handleEditClick(item)}
+                  >
+                    Muuda
+                  </button>
+                )}
               </div>
             </div>
             {item.showDetails && (
@@ -229,8 +252,8 @@ const handleEditFormSubmit = (e) => {
                 dangerouslySetInnerHTML={{ __html: item.tekst }}
               />
             )}
-                    {/* Show the edit form if editingRecipe is set */}
-            {editingRecipe && (
+            {/* Show the edit form if editingRecipe is set */}
+            {editingRecipe && editingRecipe.id === item.id && (
               <div className="form-card">
                 <h2>Muuda retsepti</h2>
                 <form onSubmit={handleEditFormSubmit}>
@@ -282,12 +305,18 @@ const handleEditFormSubmit = (e) => {
                     ></textarea>
                   </div>
                   <button type="submit">Uuenda retsept</button>
-                <button onClick={() => setEditingRecipe(null)}>Tühista</button>
+                  <button onClick={() => setEditingRecipe(null)}>
+                    Tühista
+                  </button>
+                  <button
+                    className="button"
+                    onClick={() => handleDeleteClick(item.id)}
+                  >
+                    Kustuta
+                  </button>
                 </form>
-                
               </div>
             )}
-
           </div>
         ))}
       </div>
@@ -296,7 +325,6 @@ const handleEditFormSubmit = (e) => {
 }
 
 export default App;
-
 
 //https://images.pexels.com/photos/939052/pexels-photo-939052.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
 /*Koostisosad:
