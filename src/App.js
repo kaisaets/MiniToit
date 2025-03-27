@@ -111,7 +111,7 @@ function App() {
   return (
     <div className="container">
       <header>
-        <h1 className="title">Mudilasesõbralikud retseptid</h1>
+        <h1 className="title">MINITOIT</h1>
         {/* Nupp*/}
         <button className="add-recipe-btn" onClick={toggleForm}>
           {showForm ? "Tühista" : "Lisa uus retsept"}
